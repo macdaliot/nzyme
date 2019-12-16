@@ -25,7 +25,7 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import horse.wtf.nzyme.alerts.Alert;
-import horse.wtf.nzyme.alerts.AlertsService;
+import horse.wtf.nzyme.alerts.service.AlertsService;
 import horse.wtf.nzyme.configuration.*;
 import horse.wtf.nzyme.database.Database;
 import horse.wtf.nzyme.dot11.clients.Clients;
@@ -34,6 +34,9 @@ import horse.wtf.nzyme.dot11.deception.traps.Trap;
 import horse.wtf.nzyme.dot11.interceptors.*;
 import horse.wtf.nzyme.dot11.probes.*;
 import horse.wtf.nzyme.dot11.networks.Networks;
+import horse.wtf.nzyme.notifications.Uplink;
+import horse.wtf.nzyme.notifications.uplinks.graylog.GraylogAddress;
+import horse.wtf.nzyme.notifications.uplinks.graylog.GraylogUplink;
 import horse.wtf.nzyme.periodicals.alerting.beaconrate.BeaconRateAnomalyAlertMonitor;
 import horse.wtf.nzyme.periodicals.alerting.beaconrate.BeaconRateCleaner;
 import horse.wtf.nzyme.periodicals.alerting.beaconrate.BeaconRateWriter;
@@ -432,6 +435,15 @@ public class NzymeImpl implements Nzyme {
     @Override
     public Clients getClients() {
         return clients;
+    }
+
+    @Override
+    public void notifyUplinksOfAlert(Alert alert) {
+        // Graylog uplinks.
+        for (GraylogAddress graylogAddress : configuration.graylogUplinks()) {
+            new GraylogUplink(graylogAddress.host(), graylogAddress.port(), configuration.nzymeId()).notifyOfAlert(alert);
+        }
+
     }
 
     @Override

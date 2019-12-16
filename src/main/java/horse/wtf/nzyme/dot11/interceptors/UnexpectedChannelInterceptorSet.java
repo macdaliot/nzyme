@@ -55,7 +55,14 @@ public class UnexpectedChannelInterceptorSet {
 
                 for (Dot11NetworkDefinition network : configuredNetworks) {
                     if (network.ssid().equals(frame.ssid()) && !network.channels().contains(frame.meta().getChannel())) {
-                        probe.raiseAlert(UnexpectedChannelProbeRespAlert.create(frame.ssid(), frame.transmitter(), frame.meta(), probe));
+                        probe.raiseAlert(UnexpectedChannelProbeRespAlert.create(
+                                frame.ssid(),
+                                frame.transmitter(),
+                                frame.meta().getChannel(),
+                                frame.meta().getFrequency(),
+                                frame.meta().getAntennaSignal(),
+                                1
+                        ));
                     }
                 }
             }
@@ -83,7 +90,14 @@ public class UnexpectedChannelInterceptorSet {
 
                 for (Dot11NetworkDefinition network : configuredNetworks) {
                     if (network.ssid().equals(frame.ssid()) && !network.channels().contains(frame.meta().getChannel())) {
-                        probe.raiseAlert(UnexpectedChannelBeaconAlert.create(frame.ssid(), frame.transmitter(), frame.meta(), probe));
+                        probe.raiseAlert(UnexpectedChannelBeaconAlert.create(
+                                frame.ssid(),
+                                frame.transmitter(),
+                                frame.meta().getChannel(),
+                                frame.meta().getFrequency(),
+                                frame.meta().getAntennaSignal(),
+                                1
+                        ));
                     }
                 }
             }

@@ -60,7 +60,12 @@ public class ProbeRequestTrapResponseInterceptorSet {
                         for (String ssid : ssids) {
                             if (ssid.equals(frame.ssid())) {
                                 probe.raiseAlert(ProbeRequestTrapResponseAlert.create(
-                                        ssid, frame.transmitter(), frame.meta(), probe
+                                        ssid,
+                                        frame.transmitter(),
+                                        frame.meta().getChannel(),
+                                        frame.meta().getFrequency(),
+                                        frame.meta().getAntennaSignal(),
+                                        1
                                 ));
                             }
                         }
@@ -95,7 +100,12 @@ public class ProbeRequestTrapResponseInterceptorSet {
                         for (String ssid : ssids) {
                             if (ssid.equals(frame.ssid())) {
                                 probe.raiseAlert(ProbeRequestTrapResponseAlert.create(
-                                        ssid, frame.transmitter(), frame.meta(), probe
+                                        ssid,
+                                        frame.transmitter(),
+                                        frame.meta().getChannel(),
+                                        frame.meta().getFrequency(),
+                                        frame.meta().getAntennaSignal(),
+                                        1
                                 ));
                             }
                         }

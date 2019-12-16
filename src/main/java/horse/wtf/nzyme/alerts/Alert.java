@@ -17,12 +17,18 @@
 
 package horse.wtf.nzyme.alerts;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import horse.wtf.nzyme.Subsystem;
-import horse.wtf.nzyme.dot11.probes.Dot11Probe;
+import horse.wtf.nzyme.alerts.service.AlertDatabaseEntry;
+import horse.wtf.nzyme.dot11.interceptors.misc.PwnagotchiAdvertisement;
+import horse.wtf.nzyme.notifications.FieldNames;
 import org.joda.time.DateTime;
 
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -45,7 +51,7 @@ public abstract class Alert {
         PWNAGOTCHI_ADVERTISEMENT
     }
 
-    public enum Type {
+    public enum TYPE {
         UNEXPECTED_BSSID_BEACON,
         UNEXPECTED_BSSID_PROBERESP,
         UNEXPECTED_SSID_BEACON,
@@ -58,7 +64,6 @@ public abstract class Alert {
         KNOWN_BANDIT_FINGERPRINT_PROBERESP,
         UNEXPECTED_FINGERPRINT_BEACON,
         UNEXPECTED_FINGERPRINT_PROBERESP,
-        SIGNAL_ANOMALY,
         BEACON_RATE_ANOMALY,
         PROBE_RESPONSE_TRAP_1,
         MULTIPLE_SIGNAL_TRACKS,
@@ -70,7 +75,6 @@ public abstract class Alert {
     private final DateTime firstSeen;
     private final AtomicReference<DateTime> lastSeen;
     private final AtomicLong frameCount;
-    private final Dot11Probe probe;
     private final boolean useFrameCount;
 
     private final String description;
@@ -78,16 +82,19 @@ public abstract class Alert {
     private final List<String> falsePositives;
 
     public abstract String getMessage();
-    public abstract Type getType();
+    public abstract TYPE getType();
     public abstract boolean sameAs(Alert alert);
 
     protected UUID uuid;
 
-    protected Alert(DateTime timestamp, Subsystem subsystem, Map<String, Object> fields, String description, String documentationLink, List<String> falsePositives, @Nullable Dot11Probe probe) {
-        this(timestamp, subsystem, fields, description, documentationLink, falsePositives, probe, true);
-    }
-
-    protected Alert(DateTime timestamp, Subsystem subsystem, Map<String, Object> fields, String description, String documentationLink, List<String> falsePositives, @Nullable Dot11Probe probe, boolean useFrameCount) {
+    protected Alert(DateTime timestamp,
+                    Subsystem subsystem,
+                    Map<String, Object> fields,
+                    String description,
+                    String documentationLink,
+                    List<String> falsePositives,
+                    boolean useFrameCount,
+                    long frameCount) {
         this.firstSeen = timestamp;
         this.lastSeen = new AtomicReference<>(timestamp);
         this.subsystem = subsystem;
@@ -95,10 +102,9 @@ public abstract class Alert {
         this.description = description;
         this.documentationLink = documentationLink;
         this.falsePositives = falsePositives;
-        this.probe = probe;
         this.useFrameCount = useFrameCount;
 
-        this.frameCount = new AtomicLong(1);
+        this.frameCount = new AtomicLong(frameCount);
     }
 
     public DateTime getFirstSeen() {
@@ -122,6 +128,10 @@ public abstract class Alert {
         return this.useFrameCount ? this.frameCount.get() : null;
     }
 
+    public boolean isUseFrameCount() {
+        return this.useFrameCount;
+    }
+
     public Subsystem getSubsystem() {
         return subsystem;
     }
@@ -142,16 +152,170 @@ public abstract class Alert {
         return falsePositives;
     }
 
-    public Dot11Probe getProbe() {
-        return probe;
-    }
-
     public UUID getUUID() {
         return uuid;
     }
 
     public void setUUID(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    public static Alert serializeFromDatabase(AlertDatabaseEntry db) throws IOException {
+        ObjectMapper om = new ObjectMapper();
+        Map<String, Object> fields = om.readValue(db.fields(), new TypeReference<Map<String, Object>>(){});
+
+        switch (db.type()) {
+            case UNEXPECTED_BSSID_BEACON:
+                return UnexpectedBSSIDBeaconAlert.create(
+                        (String) fields.get(FieldNames.SSID),
+                        (String) fields.get(FieldNames.BSSID),
+                        (Integer) fields.get(FieldNames.CHANNEL),
+                        (Integer) fields.get(FieldNames.FREQUENCY),
+                        (Integer) fields.get(FieldNames.ANTENNA_SIGNAL),
+                        db.frameCount()
+                );
+            case UNEXPECTED_BSSID_PROBERESP:
+                return UnexpectedBSSIDProbeRespAlert.create(
+                        (String) fields.get(FieldNames.SSID),
+                        (String) fields.get(FieldNames.BSSID),
+                        (String) fields.get(FieldNames.DESTINATION),
+                        (Integer) fields.get(FieldNames.CHANNEL),
+                        (Integer) fields.get(FieldNames.FREQUENCY),
+                        (Integer) fields.get(FieldNames.ANTENNA_SIGNAL),
+                        db.frameCount()
+                );
+            case UNEXPECTED_SSID_BEACON:
+                return UnexpectedSSIDBeaconAlert.create(
+                        (String) fields.get(FieldNames.SSID),
+                        (String) fields.get(FieldNames.BSSID),
+                        (Integer) fields.get(FieldNames.CHANNEL),
+                        (Integer) fields.get(FieldNames.FREQUENCY),
+                        (Integer) fields.get(FieldNames.ANTENNA_SIGNAL),
+                        db.frameCount()
+                );
+            case UNEXPECTED_SSID_PROBERESP:
+                return UnexpectedSSIDProbeRespAlert.create(
+                        (String) fields.get(FieldNames.SSID),
+                        (String) fields.get(FieldNames.BSSID),
+                        (Integer) fields.get(FieldNames.CHANNEL),
+                        (Integer) fields.get(FieldNames.FREQUENCY),
+                        (Integer) fields.get(FieldNames.ANTENNA_SIGNAL),
+                        db.frameCount()
+                );
+            case CRYPTO_CHANGE_BEACON:
+                return CryptoChangeBeaconAlert.create(
+                        (String) fields.get(FieldNames.SSID),
+                        (String) fields.get(FieldNames.BSSID),
+                        (String) fields.get(FieldNames.ENCOUNTERED_SECURITY),
+                        (Integer) fields.get(FieldNames.CHANNEL),
+                        (Integer) fields.get(FieldNames.FREQUENCY),
+                        (Integer) fields.get(FieldNames.ANTENNA_SIGNAL),
+                        db.frameCount()
+                );
+            case CRYPTO_CHANGE_PROBERESP:
+                return CryptoChangeProbeRespAlert.create(
+                        (String) fields.get(FieldNames.SSID),
+                        (String) fields.get(FieldNames.BSSID),
+                        (String) fields.get(FieldNames.ENCOUNTERED_SECURITY),
+                        (Integer) fields.get(FieldNames.CHANNEL),
+                        (Integer) fields.get(FieldNames.FREQUENCY),
+                        (Integer) fields.get(FieldNames.ANTENNA_SIGNAL),
+                        db.frameCount()
+                );
+            case UNEXPECTED_CHANNEL_BEACON:
+                return UnexpectedChannelBeaconAlert.create(
+                        (String) fields.get(FieldNames.SSID),
+                        (String) fields.get(FieldNames.BSSID),
+                        (Integer) fields.get(FieldNames.CHANNEL),
+                        (Integer) fields.get(FieldNames.FREQUENCY),
+                        (Integer) fields.get(FieldNames.ANTENNA_SIGNAL),
+                        db.frameCount()
+                );
+            case UNEXPECTED_CHANNEL_PROBERESP:
+                return UnexpectedChannelProbeRespAlert.create(
+                        (String) fields.get(FieldNames.SSID),
+                        (String) fields.get(FieldNames.BSSID),
+                        (Integer) fields.get(FieldNames.CHANNEL),
+                        (Integer) fields.get(FieldNames.FREQUENCY),
+                        (Integer) fields.get(FieldNames.ANTENNA_SIGNAL),
+                        db.frameCount()
+                );
+            case KNOWN_BANDIT_FINGERPRINT_BEACON:
+                return KnownBanditFingerprintBeaconAlert.create(
+                        Splitter.on(",").splitToList((String) fields.get(FieldNames.BANDIT_NAMES)),
+                        (String) fields.get(FieldNames.BANDIT_FINGERPRINT),
+                        (String) fields.get(FieldNames.SSID),
+                        (String) fields.get(FieldNames.BSSID),
+                        (Integer) fields.get(FieldNames.CHANNEL),
+                        (Integer) fields.get(FieldNames.FREQUENCY),
+                        (Integer) fields.get(FieldNames.ANTENNA_SIGNAL),
+                        db.frameCount()
+                );
+            case KNOWN_BANDIT_FINGERPRINT_PROBERESP:
+                return KnownBanditFingerprintProbeRespAlert.create(
+                        Splitter.on(",").splitToList((String) fields.get(FieldNames.BANDIT_NAMES)),
+                        (String) fields.get(FieldNames.BANDIT_FINGERPRINT),
+                        (String) fields.get(FieldNames.SSID),
+                        (String) fields.get(FieldNames.BSSID),
+                        (Integer) fields.get(FieldNames.CHANNEL),
+                        (Integer) fields.get(FieldNames.FREQUENCY),
+                        (Integer) fields.get(FieldNames.ANTENNA_SIGNAL),
+                        db.frameCount()
+                );
+            case UNEXPECTED_FINGERPRINT_BEACON:
+                return UnexpectedFingerprintBeaconAlert.create(
+                        (String) fields.get(FieldNames.SSID),
+                        (String) fields.get(FieldNames.BANDIT_FINGERPRINT),
+                        (String) fields.get(FieldNames.BSSID),
+                        (Integer) fields.get(FieldNames.CHANNEL),
+                        (Integer) fields.get(FieldNames.FREQUENCY),
+                        (Integer) fields.get(FieldNames.ANTENNA_SIGNAL),
+                        db.frameCount()
+                );
+            case UNEXPECTED_FINGERPRINT_PROBERESP:
+                return UnexpectedFingerprintProbeRespAlert.create(
+                        (String) fields.get(FieldNames.SSID),
+                        (String) fields.get(FieldNames.BANDIT_FINGERPRINT),
+                        (String) fields.get(FieldNames.BSSID),
+                        (Integer) fields.get(FieldNames.CHANNEL),
+                        (Integer) fields.get(FieldNames.FREQUENCY),
+                        (Integer) fields.get(FieldNames.ANTENNA_SIGNAL),
+                        db.frameCount()
+                );
+            case BEACON_RATE_ANOMALY:
+                return BeaconRateAnomalyAlert.create(
+                        (String) fields.get(FieldNames.SSID),
+                        (String) fields.get(FieldNames.BSSID),
+                        (Float) fields.get(FieldNames.BEACON_RATE),
+                        (Integer) fields.get(FieldNames.BEACON_RATE_THRESHOLD)
+                );
+            case PROBE_RESPONSE_TRAP_1:
+                throw new RuntimeException("NOT IMPLEMENTED.");
+            case MULTIPLE_SIGNAL_TRACKS:
+                return MultipleTrackAlert.create(
+                        (String) fields.get(FieldNames.SSID),
+                        (String) fields.get(FieldNames.BSSID),
+                        (Integer) fields.get(FieldNames.CHANNEL),
+                        (Integer) fields.get(FieldNames.TRACK_COUNT)
+                );
+            case PWNAGOTCHI_ADVERTISEMENT:
+                return PwnagotchiAdvertisementAlert.create(
+                        PwnagotchiAdvertisement.create(
+                                (String) fields.get(FieldNames.NAME),
+                                (String) fields.get(FieldNames.VERSION),
+                                (String) fields.get(FieldNames.IDENTITY),
+                                (Double) fields.get(FieldNames.UPTIME),
+                                (Integer) fields.get(FieldNames.PWND_THIS_RUN),
+                                (Integer) fields.get(FieldNames.PWND_TOTAL)
+                        ),
+                        (Integer) fields.get(FieldNames.CHANNEL),
+                        (Integer) fields.get(FieldNames.FREQUENCY),
+                        (Integer) fields.get(FieldNames.ANTENNA_SIGNAL),
+                        db.frameCount()
+                );
+            default:
+                throw new RuntimeException("Cannot serialize persisted alert of type [" + db.type() + "].");
+        }
     }
 
 }

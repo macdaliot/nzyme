@@ -15,8 +15,10 @@ public class AlertTest extends AlertTestHelper {
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         DateTime x = DateTime.now();
@@ -31,8 +33,10 @@ public class AlertTest extends AlertTestHelper {
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         UUID x = UUID.randomUUID();
@@ -47,8 +51,10 @@ public class AlertTest extends AlertTestHelper {
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertEquals(a.getFrameCount(), (Long) 1L);

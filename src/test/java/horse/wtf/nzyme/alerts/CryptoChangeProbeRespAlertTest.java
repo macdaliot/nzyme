@@ -14,8 +14,10 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         // Wait a little to make lastSeen() assertions work.
@@ -27,7 +29,7 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
         assertEquals(a.getSSID(), "wtf");
         assertEquals(a.getBSSID(), "00:c0:ca:95:68:3b");
         assertEquals(a.getMessage(), "SSID [wtf] was advertised with unexpected security settings [WPA2-EAM-PSK-CCMP].");
-        assertEquals(a.getType(), Alert.Type.CRYPTO_CHANGE_PROBERESP);
+        assertEquals(a.getType(), Alert.TYPE.CRYPTO_CHANGE_PROBERESP);
         assertEquals(a.getSubsystem(), Subsystem.DOT_11);
         assertEquals(a.getFrameCount(), (Long) 1L);
         assertFalse(a.getLastSeen().isAfterNow());
@@ -42,8 +44,10 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertTrue(a.sameAs(a2));
@@ -52,24 +56,30 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
                 "wtfoooked",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         CryptoChangeProbeRespAlert a4 = CryptoChangeProbeRespAlert.create(
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP-TKIP",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         CryptoChangeProbeRespAlert a5 = CryptoChangeProbeRespAlert.create(
                 "wtf",
                 "00:c0:ca:95:68:4b",
                 "WPA2-EAM-PSK-CCMP",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertFalse(a.sameAs(a3));
@@ -79,8 +89,10 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
         UnexpectedSSIDBeaconAlert a6 = UnexpectedSSIDBeaconAlert.create(
                 "wtf",
                 "00:c0:ca:95:68:4b",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertFalse(a.sameAs(a6));
@@ -92,8 +104,10 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
                 null,
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
     }
 
@@ -104,8 +118,10 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
                 "",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
     }
 

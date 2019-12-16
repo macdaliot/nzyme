@@ -3,9 +3,6 @@ package horse.wtf.nzyme.alerts;
 import horse.wtf.nzyme.Subsystem;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.testng.Assert.*;
 
 public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
@@ -16,8 +13,10 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
                 "wtf",
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "00:c0:ca:95:68:3b",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         // Wait a little to make lastSeen() assertions work.
@@ -29,7 +28,7 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
         assertEquals(a.getSSID(), "wtf");
         assertEquals(a.getBSSID(), "00:c0:ca:95:68:3b");
         assertEquals(a.getMessage(), "SSID [wtf] was advertised by a device with unexpected fingerprint [ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c]");
-        assertEquals(a.getType(), Alert.Type.UNEXPECTED_FINGERPRINT_BEACON);
+        assertEquals(a.getType(), Alert.TYPE.UNEXPECTED_FINGERPRINT_BEACON);
         assertEquals(a.getSubsystem(), Subsystem.DOT_11);
         assertEquals(a.getFrameCount(), (Long) 1L);
         assertFalse(a.getLastSeen().isAfterNow());
@@ -44,8 +43,10 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
                 "wtf",
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "00:c0:ca:95:68:3e",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertTrue(a.sameAs(a2));
@@ -54,16 +55,20 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
                 "wtfNOTTHESAME",
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "00:c0:ca:95:68:3b",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         UnexpectedFingerprintBeaconAlert a4 = UnexpectedFingerprintBeaconAlert.create(
                 "wtf",
                 "NEIN8735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "00:c0:ca:95:68:3b",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertFalse(a.sameAs(a3));
@@ -72,8 +77,10 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
         UnexpectedSSIDBeaconAlert a6 = UnexpectedSSIDBeaconAlert.create(
                 "wtf",
                 "00:c0:ca:95:68:4b",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertFalse(a.sameAs(a6));
@@ -85,8 +92,10 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
                 null,
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "00:c0:ca:95:68:3b",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
     }
 
@@ -96,8 +105,10 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
                 "",
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "00:c0:ca:95:68:3b",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         ); }
 
 
@@ -107,8 +118,10 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
                 "foo",
                 null,
                 "00:c0:ca:95:68:3b",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
     }
 
@@ -118,8 +131,10 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
                 "foo",
                 "",
                 "00:c0:ca:95:68:3b",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
     }
 

@@ -48,8 +48,10 @@ public class UnexpectedFingerprintInterceptorSet {
                                     frame.ssid(),
                                     frame.transmitterFingerprint(),
                                     frame.transmitter(),
-                                    frame.meta(),
-                                    probe
+                                    frame.meta().getChannel(),
+                                    frame.meta().getFrequency(),
+                                    frame.meta().getAntennaSignal(),
+                                    1
                             ));
                         }
                     }
@@ -87,8 +89,10 @@ public class UnexpectedFingerprintInterceptorSet {
                                     frame.ssid(),
                                     frame.transmitterFingerprint(),
                                     frame.transmitter(),
-                                    frame.meta(),
-                                    probe
+                                    frame.meta().getChannel(),
+                                    frame.meta().getFrequency(),
+                                    frame.meta().getAntennaSignal(),
+                                    1
                             ));
                         }
                     }

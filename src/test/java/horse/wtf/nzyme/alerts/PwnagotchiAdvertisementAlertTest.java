@@ -13,8 +13,10 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     public void testStandard() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
                 PwnagotchiAdvertisement.create("james", "1.0.0", "abc123", 60D, 1, 9001),
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         // Wait a little to make lastSeen() assertions work.
@@ -30,7 +32,7 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
         assertEquals(a.getFields().get(FieldNames.PWND_TOTAL), 9001);
         assertEquals(a.getMessage(), "Pwnagotchi [james] with identity [abc123] and version [1.0.0] detected. Uptime [60.0].");
 
-        assertEquals(a.getType(), Alert.Type.PWNAGOTCHI_ADVERTISEMENT);
+        assertEquals(a.getType(), Alert.TYPE.PWNAGOTCHI_ADVERTISEMENT);
         assertEquals(a.getSubsystem(), Subsystem.DOT_11);
         assertEquals(a.getFrameCount(), (Long) 1L);
         assertFalse(a.getLastSeen().isAfterNow());
@@ -46,8 +48,10 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     public void testWorksWithNULLName() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
                 PwnagotchiAdvertisement.create(null, "1.0.0", "abc123", 60D, 1, 9001),
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertEquals(a.getName(), "unknown");
@@ -58,8 +62,10 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     public void testWorksWithNULLVersion() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
                 PwnagotchiAdvertisement.create("james", null, "abc123", 60D, 1, 9001),
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertEquals(a.getVersion(), "0");
@@ -70,8 +76,10 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     public void testWorksWithNULLIdentity() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
                 PwnagotchiAdvertisement.create("james", "1.0.0", null, 60D, 1, 9001),
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertEquals(a.getIdentity(), "unknown");
@@ -82,8 +90,10 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     public void testWorksWithNULLUptime() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
                 PwnagotchiAdvertisement.create("james", "1.0.0", "abc123", null, 1, 9001),
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertEquals(a.getUptime(), -1);
@@ -94,8 +104,10 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     public void testWorksWithNULLPwndThisrun() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
                 PwnagotchiAdvertisement.create("james", "1.0.0", "abc123", 60D, null, 9001),
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertEquals(a.getFields().get(FieldNames.PWND_THIS_RUN), -1);
@@ -106,8 +118,10 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     public void testWorksWithNULLPwndTotal() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
                 PwnagotchiAdvertisement.create("james", "1.0.0", "abc123", 60D, 1, null),
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertEquals(a.getFields().get(FieldNames.PWND_TOTAL), -1);
@@ -118,8 +132,10 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     public void testWorksWithNULLAllOverEverythingOMG() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
                 PwnagotchiAdvertisement.create(null, null, null, null, null, null),
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertEquals(a.getName(), "unknown");

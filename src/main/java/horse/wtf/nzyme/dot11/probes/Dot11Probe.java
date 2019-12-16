@@ -34,6 +34,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Dot11Probe {
@@ -69,9 +70,8 @@ public abstract class Dot11Probe {
                 registerUplink(new GraylogUplink(
                         address.host(),
                         address.port(),
-                        configuration.nzymeId(),
-                        configuration.networkInterfaceName())
-                );
+                        configuration.nzymeId()
+                ));
             }
         }
     }
@@ -86,10 +86,8 @@ public abstract class Dot11Probe {
         }
     }
 
-    public void notifyUplinksOfAlert(Alert alert) {
-        for (Uplink uplink : this.uplinks) {
-            uplink.notifyOfAlert(alert);
-        }
+    public List<Uplink> getUplinks() {
+        return new ArrayList<>(this.uplinks);
     }
 
     public void addFrameInterceptors(@NotNull List<Dot11FrameInterceptor> interceptors) {

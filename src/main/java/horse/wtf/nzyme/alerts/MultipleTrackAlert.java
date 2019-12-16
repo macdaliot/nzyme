@@ -41,7 +41,7 @@ public class MultipleTrackAlert extends Alert {
     }};
 
     private MultipleTrackAlert(DateTime timestamp, Subsystem subsystem, Map<String, Object> fields) {
-        super(timestamp, subsystem, fields, DESCRIPTION, DOC_LINK, FALSE_POSITIVES, null, false);
+        super(timestamp, subsystem, fields, DESCRIPTION, DOC_LINK, FALSE_POSITIVES, false, -1);
     }
 
     @Override
@@ -50,8 +50,8 @@ public class MultipleTrackAlert extends Alert {
     }
 
     @Override
-    public Type getType() {
-        return Type.MULTIPLE_SIGNAL_TRACKS;
+    public TYPE getType() {
+        return TYPE.MULTIPLE_SIGNAL_TRACKS;
     }
 
     public String getSSID() {

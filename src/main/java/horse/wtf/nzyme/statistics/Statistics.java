@@ -86,7 +86,7 @@ public class Statistics {
         }
 
         probe.notifyUplinks(
-                new Notification("Malformed frame received.", channel, probe)
+                new Notification("Malformed frame received.", channel)
                         .addField(FieldNames.SUBTYPE, "malformed"), meta);
 
         malformedCount.incrementAndGet();

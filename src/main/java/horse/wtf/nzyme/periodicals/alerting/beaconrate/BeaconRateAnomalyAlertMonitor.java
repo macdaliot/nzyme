@@ -20,7 +20,7 @@ package horse.wtf.nzyme.periodicals.alerting.beaconrate;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import horse.wtf.nzyme.Nzyme;
-import horse.wtf.nzyme.alerts.AlertsService;
+import horse.wtf.nzyme.alerts.service.AlertsService;
 import horse.wtf.nzyme.alerts.BeaconRateAnomalyAlert;
 import horse.wtf.nzyme.configuration.Configuration;
 import horse.wtf.nzyme.configuration.Dot11NetworkDefinition;

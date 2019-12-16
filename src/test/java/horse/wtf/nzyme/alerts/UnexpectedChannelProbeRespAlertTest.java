@@ -13,8 +13,10 @@ public class UnexpectedChannelProbeRespAlertTest extends AlertTestHelper {
         UnexpectedChannelProbeRespAlert a = UnexpectedChannelProbeRespAlert.create(
                 "wtf",
                 "00:c0:ca:95:68:3b",
-                new Dot11MetaInformation(false, 100, 2400, 1, 0L, false),
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         // Wait a little to make lastSeen() assertions work.
@@ -24,7 +26,7 @@ public class UnexpectedChannelProbeRespAlertTest extends AlertTestHelper {
 
         assertEquals(a.getSSID(), "wtf");
         assertEquals(a.getMessage(), "SSID [wtf] was advertised with a probe response frame on an unexpected channel.");
-        assertEquals(a.getType(), Alert.Type.UNEXPECTED_CHANNEL_PROBERESP);
+        assertEquals(a.getType(), Alert.TYPE.UNEXPECTED_CHANNEL_PROBERESP);
         assertEquals(a.getSubsystem(), Subsystem.DOT_11);
         assertEquals(a.getFrameCount(), (Long) 1L);
         assertFalse(a.getLastSeen().isAfterNow());
@@ -38,8 +40,10 @@ public class UnexpectedChannelProbeRespAlertTest extends AlertTestHelper {
         UnexpectedChannelProbeRespAlert a2 = UnexpectedChannelProbeRespAlert.create(
                 "wtf",
                 "00:c0:ca:95:68:3e",
-                new Dot11MetaInformation(false, 100, 2400, 1, 0L, false),
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertTrue(a.sameAs(a2));
@@ -47,15 +51,19 @@ public class UnexpectedChannelProbeRespAlertTest extends AlertTestHelper {
         UnexpectedChannelProbeRespAlert a3 = UnexpectedChannelProbeRespAlert.create(
                 "wtfDIFF",
                 "00:c0:ca:95:68:3b",
-                new Dot11MetaInformation(false, 100, 2400, 1, 0L, false),
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         UnexpectedChannelProbeRespAlert a4 = UnexpectedChannelProbeRespAlert.create(
                 "wtf",
                 "00:c0:ca:95:68:3b",
-                new Dot11MetaInformation(false, 100, 2400, 6, 0L, false),
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertFalse(a.sameAs(a3));
@@ -65,8 +73,10 @@ public class UnexpectedChannelProbeRespAlertTest extends AlertTestHelper {
                 "wtf",
                 "00:c0:ca:95:68:4b",
                 "00:c0:ca:95:68:4b",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertFalse(a.sameAs(a6));
@@ -77,8 +87,10 @@ public class UnexpectedChannelProbeRespAlertTest extends AlertTestHelper {
         UnexpectedChannelProbeRespAlert.create(
                 null,
                 "00:c0:ca:95:68:3b",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
     }
 
@@ -87,8 +99,10 @@ public class UnexpectedChannelProbeRespAlertTest extends AlertTestHelper {
         UnexpectedChannelProbeRespAlert.create(
                 "",
                 "00:c0:ca:95:68:3b",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
     }
 

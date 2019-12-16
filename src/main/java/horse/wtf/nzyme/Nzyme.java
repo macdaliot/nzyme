@@ -19,7 +19,8 @@ package horse.wtf.nzyme;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import horse.wtf.nzyme.alerts.AlertsService;
+import horse.wtf.nzyme.alerts.Alert;
+import horse.wtf.nzyme.alerts.service.AlertsService;
 import horse.wtf.nzyme.configuration.Configuration;
 import horse.wtf.nzyme.database.Database;
 import horse.wtf.nzyme.dot11.clients.Clients;
@@ -39,6 +40,8 @@ public interface Nzyme {
 
     Networks getNetworks();
     Clients getClients();
+
+    void notifyUplinksOfAlert(Alert alert);
 
     Statistics getStatistics();
     Configuration getConfiguration();

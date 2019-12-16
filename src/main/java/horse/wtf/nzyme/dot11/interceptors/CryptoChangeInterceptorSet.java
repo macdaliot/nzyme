@@ -69,8 +69,10 @@ public class CryptoChangeInterceptorSet {
                                             frame.ssid(),
                                             frame.transmitter(),
                                             frame.taggedParameters().getFullSecurityString(),
-                                            frame.meta(),
-                                            probe
+                                            frame.meta().getChannel(),
+                                            frame.meta().getFrequency(),
+                                            frame.meta().getAntennaSignal(),
+                                            1
                                     )
                             );
                         }
@@ -108,8 +110,10 @@ public class CryptoChangeInterceptorSet {
                                             frame.ssid(),
                                             frame.transmitter(),
                                             frame.taggedParameters().getFullSecurityString(),
-                                            frame.meta(),
-                                            probe
+                                            frame.meta().getChannel(),
+                                            frame.meta().getFrequency(),
+                                            frame.meta().getAntennaSignal(),
+                                            1
                                     )
                             );
                         }

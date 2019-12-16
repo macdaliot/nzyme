@@ -40,7 +40,7 @@ public class BeaconRateAnomalyAlert extends Alert {
     }};
 
     private BeaconRateAnomalyAlert(DateTime timestamp, Subsystem subsystem, Map<String, Object> fields) {
-        super(timestamp, subsystem, fields, DESCRIPTION, DOC_LINK, FALSE_POSITIVES, null, false);
+        super(timestamp, subsystem, fields, DESCRIPTION, DOC_LINK, FALSE_POSITIVES, false, -1);
     }
 
     @Override
@@ -49,8 +49,8 @@ public class BeaconRateAnomalyAlert extends Alert {
     }
 
     @Override
-    public Type getType() {
-        return Type.BEACON_RATE_ANOMALY;
+    public TYPE getType() {
+        return TYPE.BEACON_RATE_ANOMALY;
     }
 
     public String getSSID() {

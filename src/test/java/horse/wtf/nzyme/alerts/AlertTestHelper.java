@@ -32,7 +32,7 @@ import java.util.*;
 
 public class AlertTestHelper {
 
-    protected static final Dot11MetaInformation META_NO_WEP = new Dot11MetaInformation(false, 100, 2400, 1, 0L, false);
+    public static final String CLEAR_QUERY = "DELETE FROM alerts";
 
     protected static final Map<String, BanditFingerprintDefinition> BANDITS_STANDARD = new HashMap<String, BanditFingerprintDefinition>(){{
         put("ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",

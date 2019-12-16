@@ -57,8 +57,10 @@ public class KnownBanditFingerprintInterceptorSet {
                             bandit.fingerprint(),
                             frame.ssid() == null ? "[hidden]" : frame.ssid(),
                             frame.transmitter(),
-                            frame.meta(),
-                            probe
+                            frame.meta().getChannel(),
+                            frame.meta().getFrequency(),
+                            frame.meta().getAntennaSignal(),
+                            1
                     ));
                 }
             }
@@ -87,8 +89,10 @@ public class KnownBanditFingerprintInterceptorSet {
                             bandit.fingerprint(),
                             frame.ssid() == null ? "[hidden]" : frame.ssid(),
                             frame.transmitter(),
-                            frame.meta(),
-                            probe
+                            frame.meta().getChannel(),
+                            frame.meta().getFrequency(),
+                            frame.meta().getAntennaSignal(),
+                            1
                     ));
                 }
             }

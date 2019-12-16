@@ -62,8 +62,10 @@ public class UnexpectedBSSIDInterceptorSet {
                                     frame.ssid(),
                                     frame.transmitter(),
                                     frame.destination(),
-                                    frame.meta(),
-                                    probe
+                                    frame.meta().getChannel(),
+                                    frame.meta().getFrequency(),
+                                    frame.meta().getAntennaSignal(),
+                                    1
                             ));
                         }
                     }
@@ -99,8 +101,10 @@ public class UnexpectedBSSIDInterceptorSet {
                             probe.raiseAlert(UnexpectedBSSIDBeaconAlert.create(
                                     frame.ssid(),
                                     frame.transmitter(),
-                                    frame.meta(),
-                                    probe
+                                    frame.meta().getChannel(),
+                                    frame.meta().getFrequency(),
+                                    frame.meta().getAntennaSignal(),
+                                    1
                             ));
                         }
                     }

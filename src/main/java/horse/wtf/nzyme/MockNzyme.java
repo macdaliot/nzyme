@@ -19,7 +19,8 @@ package horse.wtf.nzyme;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import horse.wtf.nzyme.alerts.AlertsService;
+import horse.wtf.nzyme.alerts.Alert;
+import horse.wtf.nzyme.alerts.service.AlertsService;
 import horse.wtf.nzyme.configuration.Configuration;
 import horse.wtf.nzyme.configuration.ConfigurationLoader;
 import horse.wtf.nzyme.database.Database;
@@ -31,6 +32,7 @@ import horse.wtf.nzyme.statistics.Statistics;
 import horse.wtf.nzyme.systemstatus.SystemStatus;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import liquibase.exception.LiquibaseException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -62,6 +64,7 @@ public class MockNzyme implements Nzyme {
     private final ObjectMapper objectMapper;
     private final Registry registry;
     private final Version version;
+    private final Database database;
 
     public MockNzyme() {
         this.version = new Version();
@@ -71,6 +74,13 @@ public class MockNzyme implements Nzyme {
             this.configuration = new ConfigurationLoader(loadFromResourceFile("nzyme-test-complete-valid.conf"), false).get();
         } catch (ConfigurationLoader.InvalidConfigurationException | ConfigurationLoader.IncompleteConfigurationException | FileNotFoundException e) {
             throw new RuntimeException("Could not load test config file from resources.", e);
+        }
+
+        this.database = new Database(configuration);
+        try {
+            this.database.initializeAndMigrate();
+        } catch (LiquibaseException e) {
+            throw new RuntimeException(e);
         }
 
         this.metricRegistry = new MetricRegistry();
@@ -103,6 +113,11 @@ public class MockNzyme implements Nzyme {
     }
 
     @Override
+    public void notifyUplinksOfAlert(Alert alert) {
+        // TODO
+    }
+
+    @Override
     public Statistics getStatistics() {
         return statistics;
     }
@@ -124,7 +139,7 @@ public class MockNzyme implements Nzyme {
 
     @Override
     public Database getDatabase() {
-        return null;
+        return database;
     }
 
     @Override
@@ -161,5 +176,6 @@ public class MockNzyme implements Nzyme {
     public Version getVersion() {
         return version;
     }
+
 
 }

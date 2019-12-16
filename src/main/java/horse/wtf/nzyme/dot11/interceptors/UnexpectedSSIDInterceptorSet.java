@@ -59,8 +59,10 @@ public class UnexpectedSSIDInterceptorSet {
                         probe.raiseAlert(UnexpectedSSIDProbeRespAlert.create(
                                 frame.ssid(),
                                 frame.transmitter(),
-                                frame.meta(),
-                                probe
+                                frame.meta().getChannel(),
+                                frame.meta().getFrequency(),
+                                frame.meta().getAntennaSignal(),
+                                1
                         ));
                     }
                 }
@@ -93,8 +95,10 @@ public class UnexpectedSSIDInterceptorSet {
                         probe.raiseAlert(UnexpectedSSIDBeaconAlert.create(
                                 frame.ssid(),
                                 frame.transmitter(),
-                                frame.meta(),
-                                probe
+                                frame.meta().getChannel(),
+                                frame.meta().getFrequency(),
+                                frame.meta().getAntennaSignal(),
+                                1
                         ));
                     }
                 }

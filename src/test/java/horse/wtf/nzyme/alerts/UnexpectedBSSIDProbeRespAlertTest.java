@@ -13,8 +13,10 @@ public class UnexpectedBSSIDProbeRespAlertTest extends AlertTestHelper {
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "e0:22:03:f8:a3:39",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         // Wait a little to make lastSeen() assertions work.
@@ -26,7 +28,7 @@ public class UnexpectedBSSIDProbeRespAlertTest extends AlertTestHelper {
         assertEquals(a.getBSSID(), "00:c0:ca:95:68:3b");
         assertEquals(a.getDestination(), "e0:22:03:f8:a3:39");
         assertEquals(a.getMessage(), "SSID [wtf] was advertised with probe response frame by unexpected BSSID [00:c0:ca:95:68:3b] for [e0:22:03:f8:a3:39]");
-        assertEquals(a.getType(), Alert.Type.UNEXPECTED_BSSID_PROBERESP);
+        assertEquals(a.getType(), Alert.TYPE.UNEXPECTED_BSSID_PROBERESP);
         assertEquals(a.getSubsystem(), Subsystem.DOT_11);
         assertEquals(a.getFrameCount(), (Long) 1L);
         assertFalse(a.getLastSeen().isAfterNow());
@@ -41,8 +43,10 @@ public class UnexpectedBSSIDProbeRespAlertTest extends AlertTestHelper {
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "aa:22:03:f8:a3:39",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertTrue(a.sameAs(a2));
@@ -51,16 +55,20 @@ public class UnexpectedBSSIDProbeRespAlertTest extends AlertTestHelper {
                 "wtfNOTTHESAME",
                 "00:c0:ca:95:68:3b",
                 "e0:22:03:f8:a3:39",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         UnexpectedBSSIDProbeRespAlert a4 = UnexpectedBSSIDProbeRespAlert.create(
                 "wtf",
                 "00:c0:ca:95:68:3e",
                 "e0:22:03:f8:a3:39",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertFalse(a.sameAs(a3));
@@ -69,8 +77,10 @@ public class UnexpectedBSSIDProbeRespAlertTest extends AlertTestHelper {
         UnexpectedChannelBeaconAlert a6 = UnexpectedChannelBeaconAlert.create(
                 "wtf",
                 "00:c0:ca:95:68:4b",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
 
         assertFalse(a.sameAs(a6));
@@ -82,8 +92,10 @@ public class UnexpectedBSSIDProbeRespAlertTest extends AlertTestHelper {
                 null,
                 "00:c0:ca:95:68:3b",
                 "e0:22:03:f8:a3:39",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
     }
 
@@ -93,8 +105,10 @@ public class UnexpectedBSSIDProbeRespAlertTest extends AlertTestHelper {
                 "",
                 "00:c0:ca:95:68:3b",
                 "e0:22:03:f8:a3:39",
-                META_NO_WEP,
-                buildMockProbe(BANDITS_STANDARD)
+                1,
+                1000,
+                -50,
+                1
         );
     }
 

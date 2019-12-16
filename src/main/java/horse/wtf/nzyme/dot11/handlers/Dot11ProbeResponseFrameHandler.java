@@ -44,7 +44,7 @@ public class Dot11ProbeResponseFrameHandler extends Dot11FrameHandler<Dot11Probe
         }
 
         probe.notifyUplinks(
-                new Notification(message, frame.meta().getChannel(), probe)
+                new Notification(message, frame.meta().getChannel())
                         .addField(FieldNames.DESTINATION, frame.destination())
                         .addField(FieldNames.TRANSMITTER, frame.transmitter())
                         .addField(FieldNames.SSID, frame.ssid() == null ? "[no SSID]" : frame.ssid())
