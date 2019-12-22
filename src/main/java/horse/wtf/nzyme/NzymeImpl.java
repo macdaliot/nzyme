@@ -28,12 +28,14 @@ import horse.wtf.nzyme.alerts.Alert;
 import horse.wtf.nzyme.alerts.service.AlertsService;
 import horse.wtf.nzyme.configuration.*;
 import horse.wtf.nzyme.database.Database;
+import horse.wtf.nzyme.dot11.Dot11MetaInformation;
 import horse.wtf.nzyme.dot11.clients.Clients;
 import horse.wtf.nzyme.dot11.deception.traps.ProbeRequestTrap;
 import horse.wtf.nzyme.dot11.deception.traps.Trap;
 import horse.wtf.nzyme.dot11.interceptors.*;
 import horse.wtf.nzyme.dot11.probes.*;
 import horse.wtf.nzyme.dot11.networks.Networks;
+import horse.wtf.nzyme.notifications.Notification;
 import horse.wtf.nzyme.notifications.Uplink;
 import horse.wtf.nzyme.notifications.uplinks.graylog.GraylogAddress;
 import horse.wtf.nzyme.notifications.uplinks.graylog.GraylogUplink;
@@ -100,6 +102,7 @@ public class NzymeImpl implements Nzyme {
     private final Registry registry;
     private final SystemStatus systemStatus;
     private final OUIManager ouiManager;
+    private final List<Uplink> uplinks;
 
     private final Networks networks;
     private final Clients clients;
@@ -120,15 +123,16 @@ public class NzymeImpl implements Nzyme {
         this.signingKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
         this.configuration = configuration;
         this.database = database;
+        this.uplinks = Lists.newArrayList();
 
-        this.statistics = new Statistics();
+        this.statistics = new Statistics(this);
         this.metrics = new MetricRegistry();
         this.registry = new Registry();
         this.probes = Lists.newArrayList();
         this.systemStatus = new SystemStatus();
         this.networks = new Networks(this);
         this.clients = new Clients(this);
-
+        ;
         this.objectMapper = new ObjectMapper();
 
         // Register JVM metrics.
@@ -177,6 +181,11 @@ public class NzymeImpl implements Nzyme {
         // Metrics JMX reporter.
         final JmxReporter reporter = JmxReporter.forRegistry(metrics).build();
         reporter.start();
+
+        // Register configured Graylog uplinks.
+        for (GraylogAddress graylogAddress : configuration.graylogUplinks()) {
+            registerUplink(new GraylogUplink(graylogAddress.host(), graylogAddress.port(), configuration.nzymeId()));
+        }
 
         // Periodicals.
         PeriodicalManager periodicalManager = new PeriodicalManager();
@@ -438,12 +447,22 @@ public class NzymeImpl implements Nzyme {
     }
 
     @Override
-    public void notifyUplinksOfAlert(Alert alert) {
-        // Graylog uplinks.
-        for (GraylogAddress graylogAddress : configuration.graylogUplinks()) {
-            new GraylogUplink(graylogAddress.host(), graylogAddress.port(), configuration.nzymeId()).notifyOfAlert(alert);
-        }
+    public void registerUplink(Uplink uplink) {
+        this.uplinks.add(uplink);
+    }
 
+    @Override
+    public void notifyUplinks(Notification notification, Dot11MetaInformation meta) {
+        for (Uplink uplink : uplinks) {
+            uplink.notify(notification, meta);
+        }
+    }
+
+    @Override
+    public void notifyUplinksOfAlert(Alert alert) {
+        for (Uplink uplink : uplinks) {
+            uplink.notifyOfAlert(alert);
+        }
     }
 
     @Override

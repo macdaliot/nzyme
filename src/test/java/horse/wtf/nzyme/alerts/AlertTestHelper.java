@@ -50,10 +50,6 @@ public class AlertTestHelper {
                         }}));
     }};
 
-    protected Dot11MockProbe buildMockProbe(Map<String, BanditFingerprintDefinition> bandits) {
-        return buildMockProbe(bandits, new MockNzyme());
-    }
-
     protected Dot11MockProbe buildMockProbe(Map<String, BanditFingerprintDefinition> bandits, MockNzyme nzyme) {
         return new Dot11MockProbe(nzyme, Dot11ProbeConfiguration.create(
                 "test-probe-1",
@@ -82,7 +78,7 @@ public class AlertTestHelper {
                 }},
                 Collections.emptyList(),
                 BANDITS_STANDARD
-        ), new Statistics());
+        ), new Statistics(nzyme));
     }
 
     protected static final Dot11ProbeConfiguration CONFIG_STANDARD = Dot11ProbeConfiguration.create(

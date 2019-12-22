@@ -91,7 +91,7 @@ public class Dot11AuthenticationFrameHandler extends Dot11FrameHandler<Dot11Auth
                 .addField(FieldNames.SUBTYPE, "auth")
                 .addFields(additionalFields);
 
-        probe.notifyUplinks(notification, frame.meta());
+        probe.notifyUplinksOfFrame(notification, frame.meta());
 
         LOG.debug(message);
     }

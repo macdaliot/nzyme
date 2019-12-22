@@ -37,7 +37,7 @@ public class Dot11AssociationResponseFrameHandler extends Dot11FrameHandler<Dot1
         String message = frame.transmitter() + " answered association request from " + frame.destination()
                 + ". Response: " + frame.response().toUpperCase() + " (" + frame.responseCode() + ")";
 
-        probe.notifyUplinks(
+        probe.notifyUplinksOfFrame(
                 new Notification(message, frame.meta().getChannel())
                         .addField(FieldNames.TRANSMITTER, frame.transmitter())
                         .addField(FieldNames.DESTINATION, frame.destination())

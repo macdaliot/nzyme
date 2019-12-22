@@ -23,9 +23,12 @@ import horse.wtf.nzyme.alerts.Alert;
 import horse.wtf.nzyme.alerts.service.AlertsService;
 import horse.wtf.nzyme.configuration.Configuration;
 import horse.wtf.nzyme.database.Database;
+import horse.wtf.nzyme.dot11.Dot11MetaInformation;
 import horse.wtf.nzyme.dot11.clients.Clients;
 import horse.wtf.nzyme.dot11.probes.Dot11Probe;
 import horse.wtf.nzyme.dot11.networks.Networks;
+import horse.wtf.nzyme.notifications.Notification;
+import horse.wtf.nzyme.notifications.Uplink;
 import horse.wtf.nzyme.ouis.OUIManager;
 import horse.wtf.nzyme.statistics.Statistics;
 import horse.wtf.nzyme.systemstatus.SystemStatus;
@@ -41,6 +44,8 @@ public interface Nzyme {
     Networks getNetworks();
     Clients getClients();
 
+    void registerUplink(Uplink uplink);
+    void notifyUplinks(Notification notification, Dot11MetaInformation meta);
     void notifyUplinksOfAlert(Alert alert);
 
     Statistics getStatistics();

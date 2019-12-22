@@ -19,14 +19,18 @@ package horse.wtf.nzyme;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import horse.wtf.nzyme.alerts.Alert;
 import horse.wtf.nzyme.alerts.service.AlertsService;
 import horse.wtf.nzyme.configuration.Configuration;
 import horse.wtf.nzyme.configuration.ConfigurationLoader;
 import horse.wtf.nzyme.database.Database;
+import horse.wtf.nzyme.dot11.Dot11MetaInformation;
 import horse.wtf.nzyme.dot11.clients.Clients;
 import horse.wtf.nzyme.dot11.probes.Dot11Probe;
 import horse.wtf.nzyme.dot11.networks.Networks;
+import horse.wtf.nzyme.notifications.Notification;
+import horse.wtf.nzyme.notifications.Uplink;
 import horse.wtf.nzyme.ouis.OUIManager;
 import horse.wtf.nzyme.statistics.Statistics;
 import horse.wtf.nzyme.systemstatus.SystemStatus;
@@ -65,6 +69,7 @@ public class MockNzyme implements Nzyme {
     private final Registry registry;
     private final Version version;
     private final Database database;
+    private final List<Uplink> uplinks;
 
     public MockNzyme() {
         this.version = new Version();
@@ -76,6 +81,8 @@ public class MockNzyme implements Nzyme {
             throw new RuntimeException("Could not load test config file from resources.", e);
         }
 
+        this.uplinks = Lists.newArrayList();
+
         this.database = new Database(configuration);
         try {
             this.database.initializeAndMigrate();
@@ -85,7 +92,7 @@ public class MockNzyme implements Nzyme {
 
         this.metricRegistry = new MetricRegistry();
         this.registry = new Registry();
-        this.statistics = new Statistics();
+        this.statistics = new Statistics(this);
         this.systemStatus = new SystemStatus();
         this.networks = new Networks(this);
         this.clients = new Clients(this);
@@ -113,8 +120,22 @@ public class MockNzyme implements Nzyme {
     }
 
     @Override
+    public void registerUplink(Uplink uplink) {
+        this.uplinks.add(uplink);
+    }
+
+    @Override
+    public void notifyUplinks(Notification notification, Dot11MetaInformation meta) {
+        for (Uplink uplink : uplinks) {
+            uplink.notify(notification, meta);
+        }
+    }
+
+    @Override
     public void notifyUplinksOfAlert(Alert alert) {
-        // TODO
+        for (Uplink uplink : uplinks) {
+            uplink.notifyOfAlert(alert);
+        }
     }
 
     @Override

@@ -48,7 +48,7 @@ public class Dot11BeaconFrameHandler extends Dot11FrameHandler<Dot11BeaconFrame>
 
         Dot11MetaInformation meta = beacon.meta();
 
-        probe.notifyUplinks(
+        probe.notifyUplinksOfFrame(
                 new Notification(message, beacon.meta().getChannel())
                         .addField(FieldNames.TRANSMITTER, beacon.transmitter())
                         .addField(FieldNames.TRANSMITTER_FINGERPRINT, beacon.transmitterFingerprint())

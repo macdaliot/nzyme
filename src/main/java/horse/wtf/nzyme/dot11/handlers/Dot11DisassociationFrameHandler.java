@@ -36,7 +36,7 @@ public class Dot11DisassociationFrameHandler extends Dot11FrameHandler<Dot11Disa
     protected void doHandle(Dot11DisassociationFrame frame) {
         String message = frame.transmitter() + " is disassociating from " + frame.destination() + " (" + frame.reasonString() + ")";
 
-        probe.notifyUplinks(
+        probe.notifyUplinksOfFrame(
                 new Notification(message, frame.meta().getChannel())
                         .addField(FieldNames.TRANSMITTER, frame.transmitter())
                         .addField(FieldNames.DESTINATION, frame.destination())

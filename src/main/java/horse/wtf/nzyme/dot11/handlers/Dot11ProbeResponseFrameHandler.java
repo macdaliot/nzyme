@@ -43,7 +43,7 @@ public class Dot11ProbeResponseFrameHandler extends Dot11FrameHandler<Dot11Probe
             message = frame.transmitter() + " responded to probe request from " + frame.destination() + " for " + frame.ssid();
         }
 
-        probe.notifyUplinks(
+        probe.notifyUplinksOfFrame(
                 new Notification(message, frame.meta().getChannel())
                         .addField(FieldNames.DESTINATION, frame.destination())
                         .addField(FieldNames.TRANSMITTER, frame.transmitter())

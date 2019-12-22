@@ -32,7 +32,7 @@ public class AlertsServiceTest extends AlertTestHelper {
                 nzyme,
                 1,
                 TimeUnit.SECONDS,
-                10,
+                2,
                 TimeUnit.SECONDS
         );
 
@@ -45,15 +45,7 @@ public class AlertsServiceTest extends AlertTestHelper {
                 1
         ));
 
-        try {
-            Thread.sleep(2500);
-        } catch (InterruptedException e) {}
-
         assertEquals(as.getActiveAlerts().size(), 1);
-
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException e) {}
 
         as.handle(UnexpectedChannelBeaconAlert.create(
                 "wtf",
@@ -73,7 +65,7 @@ public class AlertsServiceTest extends AlertTestHelper {
         assertEquals(as.getActiveAlerts().size(), 1);
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2500);
         } catch (InterruptedException e) {}
 
         assertEquals(as.getActiveAlerts().size(), 0);
@@ -171,9 +163,9 @@ public class AlertsServiceTest extends AlertTestHelper {
         Nzyme nzyme = new MockNzyme();
         nzyme.getDatabase().useHandle(handle -> handle.execute(CLEAR_QUERY));
 
-        Dot11Probe probe = new Dot11MockProbe(nzyme, CONFIG_STANDARD, new Statistics());
+        Dot11Probe probe = new Dot11MockProbe(nzyme, CONFIG_STANDARD, new Statistics(nzyme));
         LoopbackUplink loopback = new LoopbackUplink();
-        probe.registerUplink(loopback);
+        nzyme.registerUplink(loopback);
 
         AlertsService as = new AlertsService(nzyme);
         as.handle(UnexpectedSSIDBeaconAlert.create(

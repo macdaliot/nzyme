@@ -67,7 +67,7 @@ public class UnexpectedChannelBeaconAlertTest extends AlertTestHelper {
         );
 
         assertFalse(a.sameAs(a3));
-        assertFalse(a.sameAs(a4));
+        assertTrue(a.sameAs(a4));
 
         UnexpectedBSSIDProbeRespAlert a6 = UnexpectedBSSIDProbeRespAlert.create(
                 "wtf",
