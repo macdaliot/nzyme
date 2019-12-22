@@ -87,7 +87,7 @@ public class KnownBanditFingerprintProbeRespAlert extends Alert {
         return a.getSSID().equals(this.getSSID()) && a.getFingerprint().equals(this.getFingerprint());
     }
 
-    public static KnownBanditFingerprintProbeRespAlert create(List<String> banditNames, String fingerprint, @Nullable String ssid, String bssid, int channel, int frequency, int antennaSignal, long frameCount) {
+    public static KnownBanditFingerprintProbeRespAlert create(DateTime firstSeen, List<String> banditNames, String fingerprint, @Nullable String ssid, String bssid, int channel, int frequency, int antennaSignal, long frameCount) {
         ImmutableMap.Builder<String, Object> fields = new ImmutableMap.Builder<>();
 
         if (!Strings.isNullOrEmpty(ssid)) {
@@ -101,7 +101,7 @@ public class KnownBanditFingerprintProbeRespAlert extends Alert {
         fields.put(FieldNames.BANDIT_NAMES, Joiner.on(",").join(banditNames));
         fields.put(FieldNames.BANDIT_FINGERPRINT, fingerprint);
 
-        return new KnownBanditFingerprintProbeRespAlert(banditNames, fingerprint, DateTime.now(), Subsystem.DOT_11, fields.build(), frameCount);
+        return new KnownBanditFingerprintProbeRespAlert(banditNames, fingerprint, firstSeen, Subsystem.DOT_11, fields.build(), frameCount);
     }
 
 

@@ -3,6 +3,7 @@ package horse.wtf.nzyme.alerts;
 import horse.wtf.nzyme.Subsystem;
 import horse.wtf.nzyme.dot11.interceptors.misc.PwnagotchiAdvertisement;
 import horse.wtf.nzyme.notifications.FieldNames;
+import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -12,6 +13,7 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     @Test
     public void testStandard() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
+                DateTime.now(),
                 PwnagotchiAdvertisement.create("james", "1.0.0", "abc123", 60D, 1, 9001),
                 1,
                 1000,
@@ -47,6 +49,7 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     @Test
     public void testWorksWithNULLName() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
+                DateTime.now(),
                 PwnagotchiAdvertisement.create(null, "1.0.0", "abc123", 60D, 1, 9001),
                 1,
                 1000,
@@ -61,6 +64,7 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     @Test
     public void testWorksWithNULLVersion() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
+                DateTime.now(),
                 PwnagotchiAdvertisement.create("james", null, "abc123", 60D, 1, 9001),
                 1,
                 1000,
@@ -75,6 +79,7 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     @Test
     public void testWorksWithNULLIdentity() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
+                DateTime.now(),
                 PwnagotchiAdvertisement.create("james", "1.0.0", null, 60D, 1, 9001),
                 1,
                 1000,
@@ -89,6 +94,7 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     @Test
     public void testWorksWithNULLUptime() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
+                DateTime.now(),
                 PwnagotchiAdvertisement.create("james", "1.0.0", "abc123", null, 1, 9001),
                 1,
                 1000,
@@ -103,6 +109,7 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     @Test
     public void testWorksWithNULLPwndThisrun() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
+                DateTime.now(),
                 PwnagotchiAdvertisement.create("james", "1.0.0", "abc123", 60D, null, 9001),
                 1,
                 1000,
@@ -117,6 +124,7 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     @Test
     public void testWorksWithNULLPwndTotal() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
+                DateTime.now(),
                 PwnagotchiAdvertisement.create("james", "1.0.0", "abc123", 60D, 1, null),
                 1,
                 1000,
@@ -131,6 +139,7 @@ public class PwnagotchiAdvertisementAlertTest extends AlertTestHelper {
     @Test
     public void testWorksWithNULLAllOverEverythingOMG() {
         PwnagotchiAdvertisementAlert a = PwnagotchiAdvertisementAlert.create(
+                DateTime.now(),
                 PwnagotchiAdvertisement.create(null, null, null, null, null, null),
                 1,
                 1000,

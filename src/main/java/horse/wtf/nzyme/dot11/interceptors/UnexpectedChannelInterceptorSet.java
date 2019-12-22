@@ -27,6 +27,7 @@ import horse.wtf.nzyme.dot11.Dot11FrameSubtype;
 import horse.wtf.nzyme.dot11.frames.Dot11BeaconFrame;
 import horse.wtf.nzyme.dot11.frames.Dot11ProbeResponseFrame;
 import horse.wtf.nzyme.dot11.probes.Dot11Probe;
+import org.joda.time.DateTime;
 import org.pcap4j.packet.IllegalRawDataException;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class UnexpectedChannelInterceptorSet {
                 for (Dot11NetworkDefinition network : configuredNetworks) {
                     if (network.ssid().equals(frame.ssid()) && !network.channels().contains(frame.meta().getChannel())) {
                         probe.raiseAlert(UnexpectedChannelProbeRespAlert.create(
+                                DateTime.now(),
                                 frame.ssid(),
                                 frame.transmitter(),
                                 frame.meta().getChannel(),
@@ -91,6 +93,7 @@ public class UnexpectedChannelInterceptorSet {
                 for (Dot11NetworkDefinition network : configuredNetworks) {
                     if (network.ssid().equals(frame.ssid()) && !network.channels().contains(frame.meta().getChannel())) {
                         probe.raiseAlert(UnexpectedChannelBeaconAlert.create(
+                                DateTime.now(),
                                 frame.ssid(),
                                 frame.transmitter(),
                                 frame.meta().getChannel(),

@@ -1,6 +1,7 @@
 package horse.wtf.nzyme.alerts;
 
 import horse.wtf.nzyme.Subsystem;
+import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -10,6 +11,7 @@ public class CryptoChangeBeaconAlertTest extends AlertTestHelper {
     @Test
     public void testAlertStandard() {
         CryptoChangeBeaconAlert a = CryptoChangeBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
@@ -40,6 +42,7 @@ public class CryptoChangeBeaconAlertTest extends AlertTestHelper {
         assertNotNull(a.getDescription());
 
         CryptoChangeBeaconAlert a2 = CryptoChangeBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
@@ -52,6 +55,7 @@ public class CryptoChangeBeaconAlertTest extends AlertTestHelper {
         assertTrue(a.sameAs(a2));
 
         CryptoChangeBeaconAlert a3 = CryptoChangeBeaconAlert.create(
+                DateTime.now(),
                 "wtfoooked",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
@@ -62,6 +66,7 @@ public class CryptoChangeBeaconAlertTest extends AlertTestHelper {
         );
 
         CryptoChangeBeaconAlert a4 = CryptoChangeBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP-TKIP",
@@ -72,6 +77,7 @@ public class CryptoChangeBeaconAlertTest extends AlertTestHelper {
         );
 
         CryptoChangeBeaconAlert a5 = CryptoChangeBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:4b",
                 "WPA2-EAM-PSK-CCMP",
@@ -86,6 +92,7 @@ public class CryptoChangeBeaconAlertTest extends AlertTestHelper {
         assertFalse(a.sameAs(a5));
 
         UnexpectedSSIDBeaconAlert a6 = UnexpectedSSIDBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:4b",
                 1,
@@ -100,6 +107,7 @@ public class CryptoChangeBeaconAlertTest extends AlertTestHelper {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAlertHiddenSSID1() {
         CryptoChangeBeaconAlert.create(
+                DateTime.now(),
                 null,
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
@@ -114,6 +122,7 @@ public class CryptoChangeBeaconAlertTest extends AlertTestHelper {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAlertHiddenSSID2() {
         CryptoChangeBeaconAlert.create(
+                DateTime.now(),
                 "",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",

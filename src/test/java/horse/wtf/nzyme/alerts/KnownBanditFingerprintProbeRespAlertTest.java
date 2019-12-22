@@ -1,6 +1,7 @@
 package horse.wtf.nzyme.alerts;
 
 import horse.wtf.nzyme.Subsystem;
+import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class KnownBanditFingerprintProbeRespAlertTest extends AlertTestHelper {
     @Test
     public void testAlertStandard() {
         KnownBanditFingerprintProbeRespAlert a = KnownBanditFingerprintProbeRespAlert.create(
+                DateTime.now(),
                 ONE_BANDIT,
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "wtf",
@@ -54,6 +56,7 @@ public class KnownBanditFingerprintProbeRespAlertTest extends AlertTestHelper {
         assertNotNull(a.getDescription());
 
         KnownBanditFingerprintProbeRespAlert a2 = KnownBanditFingerprintProbeRespAlert.create(
+                DateTime.now(),
                 ONE_BANDIT,
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "wtf",
@@ -67,6 +70,7 @@ public class KnownBanditFingerprintProbeRespAlertTest extends AlertTestHelper {
         assertTrue(a.sameAs(a2));
 
         KnownBanditFingerprintProbeRespAlert a3 = KnownBanditFingerprintProbeRespAlert.create(
+                DateTime.now(),
                 ONE_BANDIT,
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "wtfNOTTHESAME",
@@ -78,6 +82,7 @@ public class KnownBanditFingerprintProbeRespAlertTest extends AlertTestHelper {
         );
 
         KnownBanditFingerprintProbeRespAlert a4 = KnownBanditFingerprintProbeRespAlert.create(
+                DateTime.now(),
                 ONE_BANDIT,
                 "NEIN8735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "wtf",
@@ -92,6 +97,7 @@ public class KnownBanditFingerprintProbeRespAlertTest extends AlertTestHelper {
         assertFalse(a.sameAs(a4));
 
         UnexpectedSSIDBeaconAlert a6 = UnexpectedSSIDBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:4b",
                 1,
@@ -106,6 +112,7 @@ public class KnownBanditFingerprintProbeRespAlertTest extends AlertTestHelper {
     @Test
     public void testAlertStandardMultipleBanditNames() {
         KnownBanditFingerprintProbeRespAlert a = KnownBanditFingerprintProbeRespAlert.create(
+                DateTime.now(),
                 THREE_BANDITS,
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "wtf",
@@ -123,6 +130,7 @@ public class KnownBanditFingerprintProbeRespAlertTest extends AlertTestHelper {
     @Test
     public void testAlertHiddenSSID1() {
         KnownBanditFingerprintProbeRespAlert a = KnownBanditFingerprintProbeRespAlert.create(
+                DateTime.now(),
                 ONE_BANDIT,
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 null,
@@ -141,6 +149,7 @@ public class KnownBanditFingerprintProbeRespAlertTest extends AlertTestHelper {
     @Test
     public void testAlertHiddenSSID2() {
         KnownBanditFingerprintProbeRespAlert a = KnownBanditFingerprintProbeRespAlert.create(
+                DateTime.now(),
                 ONE_BANDIT,
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "",

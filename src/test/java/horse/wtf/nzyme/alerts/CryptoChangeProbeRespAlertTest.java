@@ -1,6 +1,7 @@
 package horse.wtf.nzyme.alerts;
 
 import horse.wtf.nzyme.Subsystem;
+import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -11,6 +12,7 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
     @Test
     public void testAlertStandard() {
         CryptoChangeProbeRespAlert a = CryptoChangeProbeRespAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
@@ -41,6 +43,7 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
         assertNotNull(a.getDescription());
 
         CryptoChangeProbeRespAlert a2 = CryptoChangeProbeRespAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
@@ -53,6 +56,7 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
         assertTrue(a.sameAs(a2));
 
         CryptoChangeProbeRespAlert a3 = CryptoChangeProbeRespAlert.create(
+                DateTime.now(),
                 "wtfoooked",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
@@ -63,6 +67,7 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
         );
 
         CryptoChangeProbeRespAlert a4 = CryptoChangeProbeRespAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP-TKIP",
@@ -73,6 +78,7 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
         );
 
         CryptoChangeProbeRespAlert a5 = CryptoChangeProbeRespAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:4b",
                 "WPA2-EAM-PSK-CCMP",
@@ -87,6 +93,7 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
         assertFalse(a.sameAs(a5));
 
         UnexpectedSSIDBeaconAlert a6 = UnexpectedSSIDBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:4b",
                 1,
@@ -101,6 +108,7 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAlertHiddenSSID1() {
         CryptoChangeProbeRespAlert.create(
+                DateTime.now(),
                 null,
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
@@ -115,6 +123,7 @@ public class CryptoChangeProbeRespAlertTest extends AlertTestHelper {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAlertHiddenSSID2() {
         CryptoChangeProbeRespAlert.create(
+                DateTime.now(),
                 "",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",

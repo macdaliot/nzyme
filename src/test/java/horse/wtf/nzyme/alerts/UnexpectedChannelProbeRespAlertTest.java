@@ -2,6 +2,7 @@ package horse.wtf.nzyme.alerts;
 
 import horse.wtf.nzyme.Subsystem;
 import horse.wtf.nzyme.dot11.Dot11MetaInformation;
+import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -11,6 +12,7 @@ public class UnexpectedChannelProbeRespAlertTest extends AlertTestHelper {
     @Test
     public void testAlertStandard() {
         UnexpectedChannelProbeRespAlert a = UnexpectedChannelProbeRespAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 1,
@@ -38,6 +40,7 @@ public class UnexpectedChannelProbeRespAlertTest extends AlertTestHelper {
         assertNotNull(a.getDescription());
 
         UnexpectedChannelProbeRespAlert a2 = UnexpectedChannelProbeRespAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3e",
                 1,
@@ -49,6 +52,7 @@ public class UnexpectedChannelProbeRespAlertTest extends AlertTestHelper {
         assertTrue(a.sameAs(a2));
 
         UnexpectedChannelProbeRespAlert a3 = UnexpectedChannelProbeRespAlert.create(
+                DateTime.now(),
                 "wtfDIFF",
                 "00:c0:ca:95:68:3b",
                 1,
@@ -58,6 +62,7 @@ public class UnexpectedChannelProbeRespAlertTest extends AlertTestHelper {
         );
 
         UnexpectedChannelProbeRespAlert a4 = UnexpectedChannelProbeRespAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 1,
@@ -70,6 +75,7 @@ public class UnexpectedChannelProbeRespAlertTest extends AlertTestHelper {
         assertTrue(a.sameAs(a4));
 
         UnexpectedBSSIDProbeRespAlert a6 = UnexpectedBSSIDProbeRespAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:4b",
                 "00:c0:ca:95:68:4b",
@@ -85,6 +91,7 @@ public class UnexpectedChannelProbeRespAlertTest extends AlertTestHelper {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAlertHiddenSSID1() {
         UnexpectedChannelProbeRespAlert.create(
+                DateTime.now(),
                 null,
                 "00:c0:ca:95:68:3b",
                 1,
@@ -97,6 +104,7 @@ public class UnexpectedChannelProbeRespAlertTest extends AlertTestHelper {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAlertHiddenSSID2() {
         UnexpectedChannelProbeRespAlert.create(
+                DateTime.now(),
                 "",
                 "00:c0:ca:95:68:3b",
                 1,

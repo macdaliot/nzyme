@@ -10,6 +10,7 @@ import horse.wtf.nzyme.dot11.probes.Dot11Probe;
 import horse.wtf.nzyme.notifications.uplinks.misc.LoopbackUplink;
 import horse.wtf.nzyme.statistics.Statistics;
 import org.joda.time.DateTime;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -23,10 +24,15 @@ public class AlertsServiceTest extends AlertTestHelper {
     // TODO: updating last_seen works for sameAs alerts
     // TODO: each alert type can be serialized from db
 
+    @BeforeMethod
+    public void cleanAlerts() {
+        Nzyme nzyme = new MockNzyme();
+        nzyme.getDatabase().useHandle(handle -> handle.execute(CLEAR_QUERY));
+    }
+
     @Test
     public void testRetentionCleaning() {
         Nzyme nzyme = new MockNzyme();
-        nzyme.getDatabase().useHandle(handle -> handle.execute(CLEAR_QUERY));
 
         AlertsService as = new AlertsService(
                 nzyme,
@@ -37,6 +43,7 @@ public class AlertsServiceTest extends AlertTestHelper {
         );
 
         as.handle(UnexpectedSSIDBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 1,
@@ -48,6 +55,7 @@ public class AlertsServiceTest extends AlertTestHelper {
         assertEquals(as.getActiveAlerts().size(), 1);
 
         as.handle(UnexpectedChannelBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 1,
@@ -74,17 +82,17 @@ public class AlertsServiceTest extends AlertTestHelper {
     @Test
     public void testSameAlertsAreNotDuplicatedAndLastSeenIsUpdated() {
         Nzyme nzyme = new MockNzyme();
-        nzyme.getDatabase().useHandle(handle -> handle.execute(CLEAR_QUERY));
 
         AlertsService as = new AlertsService(
                 nzyme,
-                100,
-                TimeUnit.MILLISECONDS,
+                30,
+                TimeUnit.SECONDS,
                 10,
                 TimeUnit.MINUTES
         );
 
         as.handle(UnexpectedSSIDBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 1,
@@ -96,13 +104,15 @@ public class AlertsServiceTest extends AlertTestHelper {
         assertEquals(as.getActiveAlerts().size(), 1);
         Alert a1 = new ArrayList<>(as.getActiveAlerts().values()).get(0);
         DateTime lastSeen = a1.getLastSeen();
-        assertNotNull(a1.getLastSeen());
-
+        assertNotNull(lastSeen);
+        
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {}
 
+        // Same alert as above.
         as.handle(UnexpectedSSIDBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 1,
@@ -111,18 +121,25 @@ public class AlertsServiceTest extends AlertTestHelper {
                 1
         ));
 
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {}
+
         assertEquals(as.getActiveAlerts().size(), 1);
         Alert a1a = new ArrayList<>(as.getActiveAlerts().values()).get(0);
-        assertNotNull(a1a.getLastSeen());
+
+        assertEquals(a1.getUUID(), a1a.getUUID());
+        assertEquals(a1.getFirstSeen(), a1a.getFirstSeen());
         assertNotEquals(lastSeen, a1a.getLastSeen());
+        assertEquals(a1a.getFrameCount(), (Long) 2L);
     }
 
     @Test(expectedExceptions = UnsupportedOperationException.class)
     public void testGetActiveAlertsReturnsImmutableCopyPut() {
         Nzyme nzyme = new MockNzyme();
-        nzyme.getDatabase().useHandle(handle -> handle.execute(CLEAR_QUERY));
 
         new AlertsService(nzyme).getActiveAlerts().put(UUID.randomUUID(), UnexpectedSSIDBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 1,
@@ -140,11 +157,11 @@ public class AlertsServiceTest extends AlertTestHelper {
     @Test
     public void testSetsUUID() {
         Nzyme nzyme = new MockNzyme();
-        nzyme.getDatabase().useHandle(handle -> handle.execute(CLEAR_QUERY));
 
         AlertsService as = new AlertsService(nzyme);
 
         as.handle(UnexpectedSSIDBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 1,
@@ -161,7 +178,6 @@ public class AlertsServiceTest extends AlertTestHelper {
     @Test
     public void testUplinkConnection() {
         Nzyme nzyme = new MockNzyme();
-        nzyme.getDatabase().useHandle(handle -> handle.execute(CLEAR_QUERY));
 
         Dot11Probe probe = new Dot11MockProbe(nzyme, CONFIG_STANDARD, new Statistics(nzyme));
         LoopbackUplink loopback = new LoopbackUplink();
@@ -169,6 +185,7 @@ public class AlertsServiceTest extends AlertTestHelper {
 
         AlertsService as = new AlertsService(nzyme);
         as.handle(UnexpectedSSIDBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 1,

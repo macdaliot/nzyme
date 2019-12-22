@@ -12,6 +12,7 @@ public class AlertTest extends AlertTestHelper {
     @Test
     public void testSetLastSeen() {
         CryptoChangeBeaconAlert a = CryptoChangeBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
@@ -30,6 +31,7 @@ public class AlertTest extends AlertTestHelper {
     @Test
     public void testSetUUID() {
         CryptoChangeBeaconAlert a = CryptoChangeBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",
@@ -48,6 +50,7 @@ public class AlertTest extends AlertTestHelper {
     @Test
     public void testIncrementFrameCount() {
         CryptoChangeBeaconAlert a = CryptoChangeBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 "WPA2-EAM-PSK-CCMP",

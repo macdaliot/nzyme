@@ -85,7 +85,7 @@ public class PwnagotchiAdvertisementAlert extends Alert {
         return a.getIdentity().equals(this.getIdentity());
     }
 
-    public static PwnagotchiAdvertisementAlert create(PwnagotchiAdvertisement advertisement, int channel, int frequency, int antennaSignal, long frameCount) {
+    public static PwnagotchiAdvertisementAlert create(DateTime firstSeen, PwnagotchiAdvertisement advertisement, int channel, int frequency, int antennaSignal, long frameCount) {
         ImmutableMap.Builder<String, Object> fields = new ImmutableMap.Builder<>();
 
         fields.put(FieldNames.NAME, advertisement.name() == null ? "unknown" : advertisement.name());
@@ -98,7 +98,7 @@ public class PwnagotchiAdvertisementAlert extends Alert {
         fields.put(FieldNames.FREQUENCY, frequency);
         fields.put(FieldNames.ANTENNA_SIGNAL, antennaSignal);
 
-        return new PwnagotchiAdvertisementAlert(DateTime.now(), Subsystem.DOT_11, fields.build(), frameCount);
+        return new PwnagotchiAdvertisementAlert(firstSeen, Subsystem.DOT_11, fields.build(), frameCount);
     }
 
 }

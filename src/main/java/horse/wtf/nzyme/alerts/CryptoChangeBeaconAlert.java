@@ -80,7 +80,7 @@ public class CryptoChangeBeaconAlert extends Alert {
                 && a.getEncounteredSecurity().equals(this.getEncounteredSecurity());
     }
 
-    public static CryptoChangeBeaconAlert create(@NotNull String ssid, String bssid, String encounteredSecurity, int channel, int frequency, int antennaSignal, long frameCount) {
+    public static CryptoChangeBeaconAlert create(DateTime firstSeen, @NotNull String ssid, String bssid, String encounteredSecurity, int channel, int frequency, int antennaSignal, long frameCount) {
         if (Strings.isNullOrEmpty(ssid)) {
             throw new IllegalArgumentException("This alert cannot be raised for hidden/broadcast SSIDs.");
         }
@@ -93,7 +93,7 @@ public class CryptoChangeBeaconAlert extends Alert {
         fields.put(FieldNames.FREQUENCY, frequency);
         fields.put(FieldNames.ANTENNA_SIGNAL, antennaSignal);
 
-        return new CryptoChangeBeaconAlert(DateTime.now(), Subsystem.DOT_11, fields.build(), frameCount);
+        return new CryptoChangeBeaconAlert(firstSeen, Subsystem.DOT_11, fields.build(), frameCount);
     }
 
 }

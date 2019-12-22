@@ -24,7 +24,6 @@ import horse.wtf.nzyme.Nzyme;
 import horse.wtf.nzyme.alerts.Alert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.joda.time.DateTime;
 
 import java.util.List;
 import java.util.Map;
@@ -73,11 +72,12 @@ public class AlertsService {
             Alert activeAlert = entry.getValue();
             if(activeAlert.sameAs(alert)) {
                 // We've seen this alert before.
-                updateLastSeenAndFrameCount(activeAlert, DateTime.now(), 1);
+                updateLastSeenAndFrameCount(activeAlert, 1);
                 return;
             }
         }
 
+        // New alert.
         UUID uuid = UUID.randomUUID();
         alert.setUUID(uuid);
 
@@ -117,20 +117,18 @@ public class AlertsService {
 
         nzyme.getDatabase().useHandle(handle -> handle.execute("INSERT INTO alerts(alert_uuid, alert_type, subsystem, " +
                         "fields, first_seen, last_seen, frame_count, use_frame_count) " +
-                        "VALUES(?, ?, ?, ?, ? at time zone 'UTC', ? at time zone 'UTC', ?, ?)",
+                        "VALUES(?, ?, ?, ?, (current_timestamp at time zone 'UTC'), (current_timestamp at time zone 'UTC'), 1, ?)",
                 alert.getUUID(),
                 alert.getType(),
                 alert.getSubsystem(),
                 fields,
-                alert.getFirstSeen(),
-                alert.getLastSeen(),
-                alert.getFrameCount(),
                 alert.isUseFrameCount()
         ));
     }
 
-    private void updateLastSeenAndFrameCount(Alert alert, DateTime lastSeen, int frameIncrement) {
-        LOG.error("IMPLEMENT ME: update last seen and frame count");
+    private void updateLastSeenAndFrameCount(Alert alert, int frameIncrement) {
+        nzyme.getDatabase().useHandle(handle -> handle.execute("UPDATE alerts SET last_seen = (current_timestamp at time zone 'UTC'), frame_count = frame_count+? " +
+                "WHERE alert_uuid = ?", frameIncrement, alert.getUUID()));
     }
 
     private void runRetentionClean(int retentionDuration, TimeUnit retentionDurationTimeUnit) {

@@ -74,7 +74,7 @@ public class UnexpectedBSSIDBeaconAlert extends Alert {
         return a.getSSID().equals(this.getSSID()) && a.getBSSID().equals(this.getBSSID());
     }
 
-    public static UnexpectedBSSIDBeaconAlert create(@NotNull String ssid, String bssid, int channel, int frequency, int antennaSignal, long frameCount) {
+    public static UnexpectedBSSIDBeaconAlert create(DateTime timestamp, @NotNull String ssid, String bssid, int channel, int frequency, int antennaSignal, long frameCount) {
         if (Strings.isNullOrEmpty(ssid)) {
             throw new IllegalArgumentException("This alert cannot be raised for hidden/broadcast SSIDs.");
         }
@@ -86,7 +86,7 @@ public class UnexpectedBSSIDBeaconAlert extends Alert {
         fields.put(FieldNames.FREQUENCY, frequency);
         fields.put(FieldNames.ANTENNA_SIGNAL, antennaSignal);
 
-        return new UnexpectedBSSIDBeaconAlert(DateTime.now(), Subsystem.DOT_11, fields.build(), frameCount);
+        return new UnexpectedBSSIDBeaconAlert(timestamp, Subsystem.DOT_11, fields.build(), frameCount);
     }
 
 }

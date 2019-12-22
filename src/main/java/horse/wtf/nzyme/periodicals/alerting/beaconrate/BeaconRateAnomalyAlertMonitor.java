@@ -32,6 +32,7 @@ import horse.wtf.nzyme.periodicals.Periodical;
 import horse.wtf.nzyme.util.MetricNames;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
 
 public class BeaconRateAnomalyAlertMonitor extends Periodical {
 
@@ -79,6 +80,7 @@ public class BeaconRateAnomalyAlertMonitor extends Periodical {
 
                     if (beaconRate.rate() > network.beaconRate()) {
                         alertsService.handle(BeaconRateAnomalyAlert.create(
+                                DateTime.now(),
                                 ssid.name(),
                                 bssid.bssid(),
                                 beaconRate.rate(),

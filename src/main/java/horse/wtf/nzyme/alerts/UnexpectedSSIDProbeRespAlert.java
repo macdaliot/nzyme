@@ -73,7 +73,7 @@ public class UnexpectedSSIDProbeRespAlert extends Alert {
         return a.getSSID().equals(this.getSSID()) && a.getBSSID().equals(this.getBSSID());
     }
 
-    public static UnexpectedSSIDProbeRespAlert create(@NotNull String ssid, String bssid, int channel, int frequency, int antennaSignal, long frameCount) {
+    public static UnexpectedSSIDProbeRespAlert create(DateTime firstSeen, @NotNull String ssid, String bssid, int channel, int frequency, int antennaSignal, long frameCount) {
         if (Strings.isNullOrEmpty(ssid)) {
             throw new IllegalArgumentException("This alert cannot be raised for hidden/broadcast SSIDs.");
         }
@@ -85,7 +85,7 @@ public class UnexpectedSSIDProbeRespAlert extends Alert {
         fields.put(FieldNames.FREQUENCY, frequency);
         fields.put(FieldNames.ANTENNA_SIGNAL, antennaSignal);
 
-        return new UnexpectedSSIDProbeRespAlert(DateTime.now(), Subsystem.DOT_11, fields.build(), frameCount);
+        return new UnexpectedSSIDProbeRespAlert(firstSeen, Subsystem.DOT_11, fields.build(), frameCount);
     }
 
 

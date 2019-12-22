@@ -1,6 +1,7 @@
 package horse.wtf.nzyme.alerts;
 
 import horse.wtf.nzyme.Subsystem;
+import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -10,6 +11,7 @@ public class UnexpectedBSSIDBeaconAlertTest extends AlertTestHelper {
     @Test
     public void testAlertStandard() {
         UnexpectedBSSIDBeaconAlert a = UnexpectedBSSIDBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 1,
@@ -38,6 +40,7 @@ public class UnexpectedBSSIDBeaconAlertTest extends AlertTestHelper {
         assertNotNull(a.getDescription());
 
         UnexpectedBSSIDBeaconAlert a2 = UnexpectedBSSIDBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3b",
                 1,
@@ -49,6 +52,7 @@ public class UnexpectedBSSIDBeaconAlertTest extends AlertTestHelper {
         assertTrue(a.sameAs(a2));
 
         UnexpectedBSSIDBeaconAlert a3 = UnexpectedBSSIDBeaconAlert.create(
+                DateTime.now(),
                 "wtfNOTTHESAME",
                 "00:c0:ca:95:68:3b",
                 1,
@@ -58,6 +62,7 @@ public class UnexpectedBSSIDBeaconAlertTest extends AlertTestHelper {
         );
 
         UnexpectedBSSIDBeaconAlert a4 = UnexpectedBSSIDBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:3e",
                 1,
@@ -70,6 +75,7 @@ public class UnexpectedBSSIDBeaconAlertTest extends AlertTestHelper {
         assertFalse(a.sameAs(a4));
 
         UnexpectedChannelBeaconAlert a6 = UnexpectedChannelBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:4b",
                 1,
@@ -84,6 +90,7 @@ public class UnexpectedBSSIDBeaconAlertTest extends AlertTestHelper {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAlertHiddenSSID1() {
         UnexpectedBSSIDBeaconAlert.create(
+                DateTime.now(),
                 null,
                 "00:c0:ca:95:68:3b",
                 1,
@@ -96,6 +103,7 @@ public class UnexpectedBSSIDBeaconAlertTest extends AlertTestHelper {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAlertHiddenSSID2() {
         UnexpectedBSSIDBeaconAlert.create(
+                DateTime.now(),
                 "",
                 "00:c0:ca:95:68:3b",
                 1,

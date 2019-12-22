@@ -28,6 +28,7 @@ import horse.wtf.nzyme.dot11.Dot11FrameSubtype;
 import horse.wtf.nzyme.dot11.frames.Dot11BeaconFrame;
 import horse.wtf.nzyme.dot11.frames.Dot11ProbeResponseFrame;
 import horse.wtf.nzyme.dot11.probes.Dot11Probe;
+import org.joda.time.DateTime;
 import org.pcap4j.packet.IllegalRawDataException;
 
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class ProbeRequestTrapResponseInterceptorSet {
                         for (String ssid : ssids) {
                             if (ssid.equals(frame.ssid())) {
                                 probe.raiseAlert(ProbeRequestTrapResponseAlert.create(
+                                        DateTime.now(),
                                         ssid,
                                         frame.transmitter(),
                                         frame.meta().getChannel(),
@@ -100,6 +102,7 @@ public class ProbeRequestTrapResponseInterceptorSet {
                         for (String ssid : ssids) {
                             if (ssid.equals(frame.ssid())) {
                                 probe.raiseAlert(ProbeRequestTrapResponseAlert.create(
+                                        DateTime.now(),
                                         ssid,
                                         frame.transmitter(),
                                         frame.meta().getChannel(),

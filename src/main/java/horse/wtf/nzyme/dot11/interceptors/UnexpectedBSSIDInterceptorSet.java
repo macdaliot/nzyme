@@ -27,6 +27,7 @@ import horse.wtf.nzyme.dot11.Dot11FrameSubtype;
 import horse.wtf.nzyme.dot11.frames.Dot11BeaconFrame;
 import horse.wtf.nzyme.dot11.frames.Dot11ProbeResponseFrame;
 import horse.wtf.nzyme.dot11.probes.Dot11Probe;
+import org.joda.time.DateTime;
 import org.pcap4j.packet.IllegalRawDataException;
 
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class UnexpectedBSSIDInterceptorSet {
                         // Frame advertising our network. Check if it comes from an allowed BSSID.
                         if (!network.allBSSIDAddresses().contains(frame.transmitter())) {
                             probe.raiseAlert(UnexpectedBSSIDProbeRespAlert.create(
+                                    DateTime.now(),
                                     frame.ssid(),
                                     frame.transmitter(),
                                     frame.destination(),
@@ -99,6 +101,7 @@ public class UnexpectedBSSIDInterceptorSet {
                         // Frame advertising our network. Check if it comes from an allowed BSSID.
                         if (!network.allBSSIDAddresses().contains(frame.transmitter())) {
                             probe.raiseAlert(UnexpectedBSSIDBeaconAlert.create(
+                                    DateTime.now(),
                                     frame.ssid(),
                                     frame.transmitter(),
                                     frame.meta().getChannel(),

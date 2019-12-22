@@ -1,6 +1,7 @@
 package horse.wtf.nzyme.alerts;
 
 import horse.wtf.nzyme.Subsystem;
+import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -10,6 +11,7 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
     @Test
     public void testAlertStandard() {
         UnexpectedFingerprintBeaconAlert a = UnexpectedFingerprintBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "00:c0:ca:95:68:3b",
@@ -40,6 +42,7 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
         assertNotNull(a.getDescription());
 
         UnexpectedFingerprintBeaconAlert a2 = UnexpectedFingerprintBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "00:c0:ca:95:68:3e",
@@ -52,6 +55,7 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
         assertTrue(a.sameAs(a2));
 
         UnexpectedFingerprintBeaconAlert a3 = UnexpectedFingerprintBeaconAlert.create(
+                DateTime.now(),
                 "wtfNOTTHESAME",
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "00:c0:ca:95:68:3b",
@@ -62,6 +66,7 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
         );
 
         UnexpectedFingerprintBeaconAlert a4 = UnexpectedFingerprintBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "NEIN8735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "00:c0:ca:95:68:3b",
@@ -75,6 +80,7 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
         assertFalse(a.sameAs(a4));
 
         UnexpectedSSIDBeaconAlert a6 = UnexpectedSSIDBeaconAlert.create(
+                DateTime.now(),
                 "wtf",
                 "00:c0:ca:95:68:4b",
                 1,
@@ -89,6 +95,7 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAlertHiddenSSID1() {
         UnexpectedFingerprintBeaconAlert.create(
+                DateTime.now(),
                 null,
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "00:c0:ca:95:68:3b",
@@ -102,6 +109,7 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAlertHiddenSSID2() {
         UnexpectedFingerprintBeaconAlert.create(
+                DateTime.now(),
                 "",
                 "ec398735dc99267d453908d81bfe06ce04cfa2573d0b9edf1d940f0dbf850a9c",
                 "00:c0:ca:95:68:3b",
@@ -115,6 +123,7 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAlertEmptyFingerprint1() {
         UnexpectedFingerprintBeaconAlert.create(
+                DateTime.now(),
                 "foo",
                 null,
                 "00:c0:ca:95:68:3b",
@@ -128,6 +137,7 @@ public class UnexpectedFingerprintBeaconAlertTest extends AlertTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAlertEmptyFingerprint2() {
         UnexpectedFingerprintBeaconAlert.create(
+                DateTime.now(),
                 "foo",
                 "",
                 "00:c0:ca:95:68:3b",
